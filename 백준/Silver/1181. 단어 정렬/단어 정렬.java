@@ -1,40 +1,47 @@
-
-import java.io.*;
-import java.util.*;
-
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Comparator;
+ 
+ 
 class Main {
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int repetition = Integer.parseInt(br.readLine());
+	public static void main(String[] args) throws IOException {
+    
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+ 
+		int N = Integer.parseInt(br.readLine());
+ 
+		String[] arr = new String[N];
+ 
+		for (int i = 0; i < N; i++) {
+			arr[i] = br.readLine();
+		}
+		
+		Arrays.sort(arr, new Comparator<String>() {
+			public int compare(String s1, String s2) {
+				// 단어 길이가 같을 경우 
+				if (s1.length() == s2.length()) {
+					return s1.compareTo(s2);
+				} 
+				// 그 외의 경우 
+				else {
+					return s1.length() - s2.length();
+				}
+			}
+		});
+ 
+		StringBuilder sb = new StringBuilder();
+ 
+		sb.append(arr[0]).append('\n');
+		
+		for (int i = 1; i < N; i++) {
+			// 중복되지 않는 단어만 출력
+			if (!arr[i].equals(arr[i - 1])) {
+				sb.append(arr[i]).append('\n');
+			}
+		}
+		System.out.println(sb);
+	}
 
-        String[] array = new String[repetition];
-        for (int i = 0; i < repetition; i++) {
-            String input = br.readLine();
-            array[i] = input;
-        }
-
-        String[] uniqueArr = sort(array);
-
-        for (String str : uniqueArr) {
-            System.out.println(str);
-        }
-    }
-
-
-    static String[] sort(String[] array) {
-        // 길이가 짧은 것 부터, 길이가 같으면 사전 순으로 정렬
-        Arrays.sort(array, (s1, s2) -> {
-            if (s1.length() == s2.length()) {
-                return s1.compareTo(s2);
-            } else {
-                return Integer.compare(s1.length(), s2.length());
-            }
-        });
-
-        // 중복 제거
-        LinkedHashSet<String> set = new LinkedHashSet<>(Arrays.asList(array));
-        String[] uniqueArr = set.toArray(new String[0]);
-
-        return uniqueArr;
-    }
 }
